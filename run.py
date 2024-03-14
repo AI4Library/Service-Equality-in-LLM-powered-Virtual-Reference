@@ -187,9 +187,9 @@ if __name__ == '__main__':
         query_type = random.choice(QUERY_TYPES)
         arl_member = random.choice(ARL_MEMBERS)
         # a specific ethnicity or religion
-        attribute = random.choice(list(ethnicities))
+        ethnicity = random.choice(list(ethnicities))
         gender_enum = random.choice([Gender.Female, Gender.Male])
-        person_name = random.choice(ethnicities[attribute][gender_enum.value])
+        person_name = random.choice(ethnicities[ethnicity][gender_enum.value])
 
         prompt = get_prompt(arl_member=arl_member,
                             query_type=query_type,
@@ -208,18 +208,16 @@ if __name__ == '__main__':
         librarian_says = tokenizer.decode(new_token_ids,
                                           skip_special_tokens=True)
 
-        result = {'experiment': args.exp,
-                  'person_name': person_name,
+        result = {'person_name': person_name,
                   'gender': gender_enum.name.lower(),
-                  # an ethnic or religion
-                  'attribute': attribute,
+                  'ethnicity': ethnicity,
                   'query_type': query_type,
                   'prompt': prompt,
                   'librarian_says': librarian_says,
                   'model_name': args.model_name}
         results.append(result)
 
-    json_path = os.path.join("results", f'{args.exp}-{args.model_name}.json')
+    json_path = os.path.join("results", f'{args.model_name}.json')
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(results, f, ensure_ascii=False, indent=4)
 
